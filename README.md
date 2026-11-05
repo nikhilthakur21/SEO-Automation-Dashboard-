@@ -11,13 +11,13 @@ There are two portals in the same app:
 
 ## Live demo
 
-- App: `https://<your-vercel-app>.vercel.app`
-- Worker health check: `https://<your-render-worker>.onrender.com/health`
+- App: https://seo-automation-dashboard-one.vercel.app
+- Worker health check: https://seo-audit-worker-gb29.onrender.com/health
 
 | Role | Email | Password |
 | --- | --- | --- |
-| Admin | `admin@edgelink.test` | `<ADMIN_PASSWORD>` |
-| Client | `clinic@smilestudio.test` | `<CLIENT_PASSWORD>` |
+| Admin | `admin@edgelink.test` | `450ousapezdg` |
+| Client | `clinic@smilestudio.test` | `62jhl7z4xkyd` |
 
 The sign-in page also has buttons that fill these in. To try the pipeline, sign in as admin, open **Clients** and press **Run audit**. The audit page shows each step as the worker reaches it, then the report, the Claude JSON and the delivery log.
 

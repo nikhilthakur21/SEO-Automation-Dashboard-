@@ -7,14 +7,14 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "worker": "node src/worker/index.js",
-    "worker:dev": "node --env-file=.env --watch src/worker/index.js",
+    "worker": "node --env-file-if-exists=.env src/worker/index.js",
+    "worker:dev": "node --env-file-if-exists=.env --watch src/worker/index.js",
     "db:push": "prisma db push",
     "db:seed": "node --env-file=.env prisma/seed.js",
     "postinstall": "prisma generate"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.4.0",

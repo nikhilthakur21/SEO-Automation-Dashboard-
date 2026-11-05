@@ -6,21 +6,13 @@ import { AutoRefresh } from '@/components/auto-refresh';
 import { EmptyState, PageHeader, Panel } from '@/components/page-header';
 import { QueuePanel } from '@/components/queue-panel';
 import { ScoreBadge } from '@/components/score';
+import { StatStrip } from '@/components/stat-strip';
 import { Button } from '@/components/ui/button';
-import { hostname } from '@/lib/format';
+import { formatDate, hostname } from '@/lib/format';
+import { scoreTone, VERDICTS } from '@/lib/score';
 
 export const metadata = { title: 'Overview' };
 export const dynamic = 'force-dynamic';
-
-function Stat({ label, value, note }) {
-  return (
-    <div className="bg-card p-5">
-      <dt className="text-sm text-muted-foreground">{label}</dt>
-      <dd className="tabular mt-2 text-3xl font-semibold tracking-tight">{value}</dd>
-      {note && <p className="mt-1 text-xs text-muted-foreground">{note}</p>}
-    </div>
-  );
-}
 
 export default async function OverviewPage() {
   const monthStart = new Date();
@@ -61,22 +53,21 @@ export default async function OverviewPage() {
   return (
     <>
       <AutoRefresh active={active} />
-      <PageHeader
-        title="Overview"
-        description="Audit activity across every client."
-        actions={
-          <Button asChild variant="outline">
-            <Link href="/admin/clients">Run an audit</Link>
-          </Button>
-        }
-      />
+      <PageHeader title="Overview" description="Audit activity across every client." />
 
-      <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border bg-border lg:grid-cols-4">
-        <Stat label="Clients" value={clientCount} />
-        <Stat label="Audits this month" value={monthCount} />
-        <Stat label="Average score" value={average ?? '–'} note="Latest audit per client" />
-        <Stat label="Critical issues" value={scored.length ? critical : '–'} note="Open across latest audits" />
-      </dl>
+      <StatStrip
+        items={[
+          { label: 'Clients', value: clientCount, note: 'Active client accounts' },
+          { label: 'Audits this month', value: monthCount, note: `Since ${formatDate(monthStart)}` },
+          {
+            label: 'Average score',
+            value: average ?? '–',
+            suffix: average === null ? null : '/100',
+            note: average === null ? 'No completed audits yet' : `${VERDICTS[scoreTone(average)]}, latest audit per client`,
+          },
+          { label: 'Critical issues', value: scored.length ? critical : '–', note: 'Open across latest audits' },
+        ]}
+      />
 
       <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
         <Panel

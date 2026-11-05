@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
-import { PortalShell } from '@/components/portal-shell';
+import { AppShell } from '@/components/app-shell';
 import { requireClient } from '@/lib/auth';
+import { hostname } from '@/lib/format';
 import { getPortalData } from '@/lib/portal';
 
 export default async function PortalLayout({ children }) {
@@ -12,17 +13,23 @@ export default async function PortalLayout({ children }) {
   const result = latest?.result;
 
   return (
-    <PortalShell
-      client={{ name: client.name, websiteUrl: client.websiteUrl, email: session.email }}
+    <AppShell
+      variant="client"
+      account={{ name: client.name, email: session.email }}
+      topbar={{ title: client.name, subtitle: hostname(client.websiteUrl), href: client.websiteUrl }}
+      action={
+        latest?.pdfPath
+          ? { href: `/api/audit/${latest.id}/pdf`, label: 'Download latest PDF', short: 'PDF', icon: 'download', external: true }
+          : null
+      }
       counts={{
         fixFirst: result?.critical_issues.length,
         quickWins: result?.quick_wins.length,
         recommendations: result?.recommendations.length,
         reports: completed.length,
       }}
-      latestPdf={latest?.pdfPath ? latest.id : null}
     >
       {children}
-    </PortalShell>
+    </AppShell>
   );
 }

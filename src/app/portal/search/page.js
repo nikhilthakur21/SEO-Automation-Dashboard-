@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { PageHeader, Panel } from '@/components/page-header';
-import { NoReport, StatStrip } from '@/components/portal-widgets';
+import { NoReport } from '@/components/portal-widgets';
+import { StatStrip } from '@/components/stat-strip';
 import { Competitors, QueryTable, Vitals } from '@/components/search-performance';
 import { requireClient } from '@/lib/auth';
 import { formatDate } from '@/lib/format';

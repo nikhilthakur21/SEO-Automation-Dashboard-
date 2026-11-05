@@ -4,20 +4,6 @@ import { EmptyState } from '@/components/page-header';
 import { formatDate } from '@/lib/format';
 import { cn } from '@/lib/utils';
 
-export function StatStrip({ items }) {
-  return (
-    <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border bg-border lg:grid-cols-4">
-      {items.map((item) => (
-        <div key={item.label} className="bg-card p-5">
-          <dt className="text-sm text-muted-foreground">{item.label}</dt>
-          <dd className={cn('tabular mt-2 text-2xl font-semibold tracking-tight', item.className)}>{item.value}</dd>
-          {item.note && <p className="mt-1 text-xs leading-snug text-muted-foreground">{item.note}</p>}
-        </div>
-      ))}
-    </dl>
-  );
-}
-
 export function NumberedList({ items, tone = 'primary' }) {
   return (
     <ol className="divide-y">

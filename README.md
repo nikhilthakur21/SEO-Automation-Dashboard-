@@ -87,7 +87,7 @@ src/
 
 ## Running locally
 
-You need Node 20 or newer, a Postgres database and a Redis URL (the free Supabase and Upstash tiers are fine).
+You need Node 22 or newer, a Postgres database and a Redis URL (the free Supabase and Upstash tiers are fine).
 
 ```bash
 npm install
@@ -132,5 +132,6 @@ The same builder is the fallback when a Claude call fails (no credit left, a rev
 - PDFs go to `/tmp/reports` (the R2 stand-in from the brief) and then to Supabase Storage, since the worker's disk is wiped on restart and Vercel can't read it anyway. `/api/audit/[id]/pdf` checks the session and redirects to a signed URL.
 - Supabase pauses free projects after a week of no activity. The cron route hits the DB every minute and Storage once an hour, so that shouldn't happen.
 - The prompts in `src/lib/prompt.js` are copied from the brief as is. Claude's reply goes through structured outputs with a zod schema, so it's validated before it's saved.
+- The API routes check the session: `POST /api/audit` needs the admin login, and `GET /api/audit/[id]` works for the admin or the client who owns the audit. `/api/cron/audits` uses the `CRON_SECRET` header instead.
 - The given schema has no users table, so I didn't add one. Admin login comes from env vars, and clients log in with their client email plus a shared `CLIENT_PASSWORD`. A real deployment would need per-client accounts or magic links.
 - The brief asks for Next.js 14, so this runs on 14.2.35 (the last 14.x). `npm audit` reports advisories that are only fixed in 15+, mostly for features not used here (`next/image`, rewrites).

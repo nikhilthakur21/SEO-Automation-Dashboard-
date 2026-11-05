@@ -2,7 +2,8 @@ import { redirect } from 'next/navigation';
 import { AuditLive } from '@/components/audit-live';
 import { ScoreHero } from '@/components/audit-report';
 import { PageHeader } from '@/components/page-header';
-import { DeliveryNote, NoReport, PreviewPanel, StatStrip } from '@/components/portal-widgets';
+import { DeliveryNote, NoReport, PreviewPanel } from '@/components/portal-widgets';
+import { StatStrip } from '@/components/stat-strip';
 import { requireClient } from '@/lib/auth';
 import { formatDate } from '@/lib/format';
 import { getPortalData, mainRanking, nextAuditDate, searchTotals } from '@/lib/portal';
@@ -15,6 +16,7 @@ function glance(latest, previous) {
   const ranking = mainRanking(signals?.rankings);
   const search = searchTotals(signals?.gsc);
   const speed = signals?.pagespeed?.categories?.performance?.score;
+  const speedScore = typeof speed === 'number' ? Math.round(speed * 100) : null;
   const change = previous ? result.overall_score - previous.overallScore : null;
 
   return [
@@ -36,8 +38,9 @@ function glance(latest, previous) {
     },
     {
       label: 'Mobile speed',
-      value: typeof speed === 'number' ? Math.round(speed * 100) : '–',
-      note: 'PageSpeed score out of 100',
+      value: speedScore ?? '–',
+      suffix: speedScore === null ? null : '/100',
+      note: 'PageSpeed performance score',
     },
   ];
 }

@@ -72,22 +72,29 @@ export function RecommendationList({
           <h2 className="font-semibold">{title}</h2>
           <p className="mt-0.5 text-sm text-muted-foreground">{description}</p>
         </div>
-        <div className="-mx-1 flex gap-1 overflow-x-auto px-1" role="tablist" aria-label="Filter by priority">
-          {FILTERS.filter((f) => f === 'ALL' || counts[f]).map((f) => (
-            <button
-              key={f}
-              role="tab"
-              aria-selected={filter === f}
-              onClick={() => setFilter(f)}
-              className={cn(
-                'flex h-8 shrink-0 items-center gap-1.5 rounded-md px-2.5 text-sm transition-colors',
-                filter === f ? 'bg-secondary font-medium text-foreground' : 'text-muted-foreground hover:text-foreground',
-              )}
-            >
-              {f === 'ALL' ? 'All' : PRIORITY_LABELS[f]}
-              <span className="tabular text-xs text-muted-foreground">{counts[f]}</span>
-            </button>
-          ))}
+        <div className="overflow-x-auto">
+          <div className="inline-flex gap-1 rounded-lg bg-secondary p-1" role="tablist" aria-label="Filter by priority">
+            {FILTERS.filter((f) => f === 'ALL' || counts[f]).map((f) => {
+              const active = filter === f;
+              return (
+                <button
+                  key={f}
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => setFilter(f)}
+                  className={cn(
+                    'flex h-7 shrink-0 items-center gap-1.5 rounded-md px-2.5 text-sm transition-colors',
+                    active
+                      ? 'bg-card font-medium text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:bg-card/60 hover:text-foreground',
+                  )}
+                >
+                  {f === 'ALL' ? 'All' : PRIORITY_LABELS[f]}
+                  <span className="tabular text-xs text-muted-foreground">{counts[f]}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </header>
       <ul className="divide-y">

@@ -42,21 +42,36 @@ export default async function AuditsPage({ searchParams }) {
       <AutoRefresh active={countFor.active > 0} />
       <PageHeader title="Audits" description="Manual runs and the monthly schedule, newest first." />
 
-      <nav className="-mx-1 mb-4 flex gap-1 overflow-x-auto px-1" aria-label="Filter audits">
-        {FILTERS.map((f) => (
-          <Link
-            key={f.key}
-            href={f.key === 'all' ? '/admin/audits' : `/admin/audits?status=${f.key}`}
-            className={cn(
-              'flex h-8 shrink-0 items-center gap-1.5 rounded-md px-3 text-sm transition-colors',
-              filter.key === f.key ? 'bg-card font-medium shadow-sm ring-1 ring-border' : 'text-muted-foreground hover:text-foreground',
-            )}
-          >
-            {f.label}
-            <span className="tabular text-xs text-muted-foreground">{countFor[f.key]}</span>
-          </Link>
-        ))}
-      </nav>
+      <div className="mb-4 overflow-x-auto">
+        <nav className="inline-flex gap-1 rounded-lg bg-secondary p-1" aria-label="Filter audits">
+          {FILTERS.map((f) => {
+            const active = filter.key === f.key;
+            return (
+              <Link
+                key={f.key}
+                href={f.key === 'all' ? '/admin/audits' : `/admin/audits?status=${f.key}`}
+                aria-current={active ? 'page' : undefined}
+                className={cn(
+                  'flex h-8 shrink-0 items-center gap-2 rounded-md px-3 text-sm transition-colors',
+                  active
+                    ? 'bg-card font-medium text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:bg-card/60 hover:text-foreground',
+                )}
+              >
+                {f.label}
+                <span
+                  className={cn(
+                    'tabular min-w-5 rounded px-1.5 text-center text-xs',
+                    active ? 'bg-secondary text-foreground' : 'bg-card/70 text-muted-foreground',
+                  )}
+                >
+                  {countFor[f.key]}
+                </span>
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
 
       {audits.length ? (
         <div className="rounded-lg border bg-card">
